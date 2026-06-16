@@ -40,7 +40,7 @@ output_file = 'data/raw/aapl_raw.csv'
 df.to_csv(output_file, index=False)
 print(f"✓ Data saved to {output_file}")
 
-# 
+#
 print(f"\nShape: {df.shape}")
 print(f"Columns: {list(df.columns)}")
 print(f"\nFirst few rows:")
