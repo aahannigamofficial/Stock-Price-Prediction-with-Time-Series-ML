@@ -43,5 +43,5 @@ print(f"✓ Data saved to {output_file}")
 #
 print(f"\nShape: {df.shape}")
 print(f"Columns: {list(df.columns)}")
-print(f"\nFirst few rows:")
+print("\nFirst few rows:")
 print(df.head())
