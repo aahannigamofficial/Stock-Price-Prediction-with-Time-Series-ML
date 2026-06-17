@@ -25,8 +25,8 @@ def calculate_lag_features(prices, lag=1):
 
 def calculate_rsi(prices, period=14):
     delta = prices.diff()
-    gain = delta.where(delta > 0)
-    loss = -delta.where(delta < 0)
+    gain = delta.where(delta > 0,0)
+    loss = -(delta).where(delta < 0,0)
 
     avg_gain = gain.rolling(window=period).mean()
     avg_loss = loss.rolling(window=period).mean()
@@ -69,6 +69,7 @@ df['macd'], df['macd_signal'], df['macd_histogram'] = calculate_macd(df['close']
 df['bb_upper'], df['bb_middle'], df['bb_lower'] = calculate_bollinger_bands(df['close'])
 
 df.to_csv('data/processed/aapl_features.csv', index=False)
+
 print(f"\nShape: {df.shape}")
 print(f"Columns: {list(df.columns)}")
 print("\nFirst few rows:")
