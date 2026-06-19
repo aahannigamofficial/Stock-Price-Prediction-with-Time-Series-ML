@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
-
+import joblib
 # Load features
 df = pd.read_csv('data/processed/aapl_features.csv')
 
@@ -49,3 +49,9 @@ X_test_scaled = scaler.transform(X_test)
 
 print(f"\nScaling complete!")
 print(f"X_train_scaled shape: {X_train_scaled.shape}")
+joblib.dump(X_train_scaled, 'data/X_train_scaled.pkl')
+joblib.dump(y_train, 'data/y_train.pkl')
+joblib.dump(X_val_scaled, 'data/X_val_scaled.pkl')
+joblib.dump(y_val, 'data/y_val.pkl')
+joblib.dump(X_test_scaled, 'data/X_test_scaled.pkl')
+joblib.dump(y_test, 'data/y_test.pkl')
