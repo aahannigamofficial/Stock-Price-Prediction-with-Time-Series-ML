@@ -65,3 +65,6 @@ model5_fit = model5.fit()
 y_pred5 = model5_fit.forecast(steps=len(y_test_np))
 mae5 = np.mean(np.abs(y_pred5 - y_test_np))
 print(f"ARIMA MAE: {mae5:.4f}")
+
+joblib.dump(model1, 'data/model1.pkl')
+print("✓ Linear Regression model saved!")

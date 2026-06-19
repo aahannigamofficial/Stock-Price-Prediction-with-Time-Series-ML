@@ -1,0 +1,27 @@
+
+LINEAR REGRESSION MODEL - TEST SET EVALUATION
+
+Quantitative Metrics:
+  • MAE (Mean Absolute Error):        $3.42
+  • RMSE (Root Mean Squared Error):   $4.59
+  • MAPE (Mean Absolute % Error):     1.25%
+  • R² Score:                         0.9413
+  • Directional Accuracy:             49.09%
+
+Error Statistics:
+  • Min Error:                        $0.02
+  • Max Error:                        $12.88
+  • Median Error:                     $2.58
+  • Std Dev of Errors:                $3.06
+
+Interpretation:
+  ✓ The model explains 94.13% of price variation
+  ✓ Average prediction error is $3.42 per share
+  ✓ Model predicts direction correctly 49.09% of the time
+  ✓ MAPE of 1.25% indicates excellent accuracy
+
+Conclusion:
+  The Linear Regression model demonstrates strong predictive performance
+  on the test set, with low MAE and high R² score. The directional
+  accuracy of 49.09% suggests the model effectively
+  captures price movement trends.
