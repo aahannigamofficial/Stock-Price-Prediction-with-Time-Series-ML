@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Price Prediction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .hero {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #999;
+            font-size: 1em;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            color: #666;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="number"] {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.95em;
+            transition: all 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-predict {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #e0e0e0;
+        }
+
+        /* RIGHT PANEL */
+        .results {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .prediction-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .prediction-label {
+            font-size: 0.85em;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .prediction-price {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .confidence-text {
+            font-size: 0.9em;
+            opacity: 0.85;
+            margin-top: 10px;
+        }
+
+        .confidence-text strong {
+            font-weight: 600;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .metric {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+        }
+
+        .metric-label {
+            color: #999;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid #c33;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .success {
+            color: #28a745;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success.show {
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <header>
+            <h1>📈 Stock Price Prediction</h1>
+            <p>Linear Regression Model | Real-time Predictions</p>
+        </header>
+
+        <div class="main-content">
+            <!-- LEFT: INPUT FORM -->
+            <div class="section">
+                <h2>Input Features</h2>
+                <form id="predictionForm">
+                    <div class="features-grid">
+                        <div class="form-group">
+                            <label>Close ($)</label>
+                            <input type="number" id="feature0" placeholder="187.5" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>High ($)</label>
+                            <input type="number" id="feature1" placeholder="189.2" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Low ($)</label>
+                            <input type="number" id="feature2" placeholder="186.1" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Open ($)</label>
+                            <input type="number" id="feature3" placeholder="185.5" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Volume</label>
+                            <input type="number" id="feature4" placeholder="65000000" step="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>SMA 5</label>
+                            <input type="number" id="feature5" placeholder="186.5" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Daily Return</label>
+                            <input type="number" id="feature6" placeholder="0.5" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Close Lag 1</label>
+                            <input type="number" id="feature7" placeholder="187.0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>RSI 14</label>
+                            <input type="number" id="feature8" placeholder="55.2" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>MACD</label>
+                            <input type="number" id="feature9" placeholder="0.08" step="0.001" required>
+                        </div>
+                        <div class="form-group">
+                            <label>MACD Signal</label>
+                            <input type="number" id="feature10" placeholder="0.06" step="0.001" required>
+                        </div>
+                        <div class="form-group">
+                            <label>MACD Hist</label>
+                            <input type="number" id="feature11" placeholder="0.02" step="0.001" required>
+                        </div>
+                        <div class="form-group">
+                            <label>BB Upper</label>
+                            <input type="number" id="feature12" placeholder="195.0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>BB Middle</label>
+                            <input type="number" id="feature13" placeholder="188.0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>BB Lower</label>
+                            <input type="number" id="feature14" placeholder="181.0" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn-predict">🚀 Predict</button>
+                        <button type="reset" class="btn-reset">Clear</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- RIGHT: RESULTS -->
+            <div class="section results">
+                <h2>Results</h2>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Predicting...</p>
+                </div>
+
+                <div id="resultContent" class="hidden">
+                    <div class="prediction-box">
+                        <div class="prediction-label">Predicted Price</div>
+                        <div class="prediction-price" id="predictedPrice">$0.00</div>
+                        <div class="confidence-text">
+                            <strong id="upperBound">Upper: $0.00</strong><br>
+                            <strong id="lowerBound">Lower: $0.00</strong>
+                        </div>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <div class="metric-label">MAE</div>
+                            <div class="metric-value">$3.42</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">RMSE</div>
+                            <div class="metric-value">$4.59</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">R² Score</div>
+                            <div class="metric-value">0.941</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">MAPE</div>
+                            <div class="metric-value">1.25%</div>
+                        </div>
+                    </div>
+
+                    <div class="success" id="success">✓ Prediction successful!</div>
+                </div>
+
+                <div class="error" id="errorMessage"></div>
+
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-size: 0.9em;">
+                    <strong style="color: #667eea;">Model Info</strong><br>
+                    <span style="color: #666;">Accuracy: 94.13% | Error: ±$3.42</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://127.0.0.1:8000';
+
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const features = [];
+            for (let i = 0; i < 15; i++) {
+                const value = parseFloat(document.getElementById(`feature${i}`).value);
+                if (isNaN(value)) {
+                    showError('Please fill in all fields');
+                    return;
+                }
+                features.push(value);
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultContent').classList.add('hidden');
+            document.getElementById('errorMessage').classList.remove('show');
+
+            try {
+                const response = await fetch(`${API_URL}/predict`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ features: features })
+                });
+
+                const data = await response.json();
+
+                if (data.status !== 'success') {
+                    showError(data.status || 'Prediction failed');
+                    document.getElementById('loading').style.display = 'none';
+                    return;
+                }
+
+                document.getElementById('predictedPrice').textContent = `$${data.predicted_price.toFixed(2)}`;
+                document.getElementById('upperBound').textContent = `Upper: $${data.upper_bound.toFixed(2)}`;
+                document.getElementById('lowerBound').textContent = `Lower: $${data.lower_bound.toFixed(2)}`;
+
+                document.getElementById('resultContent').classList.remove('hidden');
+                document.getElementById('success').classList.add('show');
+                document.getElementById('loading').style.display = 'none';
+
+            } catch (error) {
+                showError(`Connection error. Make sure FastAPI is running on http://127.0.0.1:8000`);
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = `❌ ${message}`;
+            errorDiv.classList.add('show');
+        }
+    </script>
+</body>
+</html>
